@@ -84,6 +84,10 @@ trait SerializesAndRestoresModelIdentifiers
 
         return new $collectionClass(
             collect($value->id)->map(function ($id) use ($collection) {
+                // if id is base64 decoded binary id
+                if ( base64_encode(base64_decode($id, true)) === $id) {
+                    $id = base64_decode($id);
+                }
                 return $collection[$id] ?? null;
             })->filter()
         );
